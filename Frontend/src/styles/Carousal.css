@@ -1,0 +1,15 @@
+.carousal {
+  margin-bottom: 40px; 
+}
+
+.carousel-image-container {
+  height: 600px; 
+  overflow: hidden;
+}
+
+.carousel-image-container img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+ 
+}
