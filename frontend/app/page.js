@@ -18,16 +18,7 @@ const montserrat = Montserrat({
 });
 
 export default function BeauVieHomepage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartItems, setCartItems] = useState(3);
-
-  const navItems = [
-    { name: "Fragrance", href: "#" },
-    { name: "Makeup", href: "#" },
-    { name: "Skincare", href: "#" },
-    { name: "Hair", href: "#" },
-    { name: "Body & Bath", href: "#" },
-  ];
 
   const heroProducts = [
     { id: 1, name: "Éclat Lumière", price: 98, category: "Serum", bestseller: true },
@@ -54,82 +45,24 @@ export default function BeauVieHomepage() {
     }
   ];
 
+  const addToCart = () => {
+    setCartItems(c => c + 1);
+  };
+
   return (
-    <div className={`min-h-screen bg-white  ${montserrat.variable} ${playfair.variable}`}>
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-100 text-black" >
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <a href="#" className="w-16">
-          <svg width="120" height="60" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-  <text x="50%" y="50%" font-family="serif" font-size="40" fill="black" text-anchor="middle" dominant-baseline="middle">
-    BeauVie
-  </text>
-</svg>
-          </a>
-
-          <nav className="hidden md:block">
-            <ul className="flex space-x-8">
-              {navItems.map((item) => (
-                <li key={item.name}>
-                  <a href={item.href} className="text-sm uppercase hover:text-gray-500 transition font-montserrat">
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <button 
-            className="md:hidden p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-
-          <div className="flex items-center space-x-6">
-            <a href="#" className="hidden md:block">
-              <Image src="/search-icon.svg" width={16} height={16} alt="Search" />
-            </a>
-            <a href="#" className="relative">
-              <Image src="/cart-icon.svg" width={16} height={16} alt="Cart" />
-              {cartItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-white text-black text-xs w-5 h-5 flex items-center justify-center rounded-full font-montserrat">
-                  {cartItems}
-                </span>
-              )}
-            </a>
-          </div>
-        </div>
-
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white py-4 px-4">
-            <ul className="space-y-4">
-              {navItems.map((item) => (
-                <li key={`mobile-${item.name}`}>
-                  <a href={item.href} className="block uppercase py-2 font-montserrat">
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </header>
-
+    <div className={`min-h-screen bg-white ${montserrat.variable} ${playfair.variable}`}>
       {/* Hero Section */}
       <section className="relative h-screen max-h-[800px] text-black">
         <Image
-          src="/BeauVie-hero.jpg"
+          src="/v4.jpg" 
           fill
           className="object-cover object-center"
           alt="BeauVie Hero"
           priority
           quality={90}
         />
-        <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center">
+        {/* Overlay REMOVED: no bg-black, no bg-opacity-20 */}
+        <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-4 text-white">
             <h1 className={`text-4xl md:text-6xl mb-6 max-w-xl font-playfair`}>
               French Elegance, Modern Beauty
@@ -164,7 +97,7 @@ export default function BeauVieHomepage() {
                   src={`/product-${product.id}.jpg`}
                   fill
                   className="object-cover transition duration-500 group-hover:scale-105"
-                  alt={product.name}
+                  alt={`${product.name} ${product.category}`}
                 />
                 <div className="absolute top-4 left-4">
                   {product.bestseller && (
@@ -184,7 +117,8 @@ export default function BeauVieHomepage() {
                 <p className="text-gray-900 font-montserrat">${product.price}</p>
                 <button 
                   className="mt-4 border border-black px-6 py-2 text-sm hover:bg-black hover:text-white transition font-montserrat"
-                  onClick={() => setCartItems(c => c + 1)}
+                  onClick={addToCart}
+                  aria-label={`Add ${product.name} to cart`}
                 >
                   Add to Bag
                 </button>
@@ -281,7 +215,7 @@ export default function BeauVieHomepage() {
                 src="/brand-story.jpg"
                 fill
                 className="object-cover"
-                alt="BeauVie Story"
+                alt="BeauVie brand story and philosophy"
               />
             </div>
           </div>
@@ -296,11 +230,14 @@ export default function BeauVieHomepage() {
             Subscribe for exclusive offers, beauty tips, and early access to new collections
           </p>
           <form className="flex flex-col sm:flex-row gap-4">
+            <label htmlFor="newsletter-email" className="sr-only">Email address</label>
             <input
+              id="newsletter-email"
               type="email"
               placeholder="Your email address"
               className="flex-grow px-4 py-3 bg-transparent border border-white placeholder-gray-400 font-montserrat"
               required
+              aria-required="true"
             />
             <button 
               type="submit"
@@ -314,63 +251,6 @@ export default function BeauVieHomepage() {
           </p>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-black py-12 border-t border-gray-100">
-        <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className={`text-lg mb-4 font-playfair`}>Customer Care</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Contact Us</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">FAQs</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Shipping</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Returns</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className={`text-lg mb-4 font-playfair`}>About BeauVie</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Our Story</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Sustainability</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Ingredients</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Careers</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className={`text-lg mb-4 font-playfair`}>Legal</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Terms</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Privacy</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Accessibility</a></li>
-              <li><a href="#" className="text-sm hover:text-gray-500 transition font-montserrat">Cookies</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className={`text-lg mb-4 font-playfair`}>Connect</h3>
-            <div className="flex space-x-4 mb-6">
-              {['facebook', 'instagram', 'pinterest', 'tiktok'].map((social) => (
-                <a key={social} href="#" className="hover:opacity-75 transition">
-                  <Image 
-                    src={`/${social}-icon.svg`} 
-                    width={20} 
-                    height={20} 
-                    alt={social} 
-                    className="w-5 h-5"
-                  />
-                </a>
-              ))}
-            </div>
-            <p className="text-sm text-gray-500 font-montserrat">
-              Sign up for our newsletter
-            </p>
-          </div>
-        </div>
-        <div className="container mx-auto px-4 mt-12 pt-6 border-t border-gray-100 text-center">
-          <p className="text-sm text-gray-500 font-montserrat">
-            © {new Date().getFullYear()} BeauVie. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
